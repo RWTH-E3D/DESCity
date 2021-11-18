@@ -15,22 +15,33 @@ import PySide2
 from PySide2 import QtWidgets, QtGui
 import gui_funct as gf
 
+# sys.path.insert(0, '/CityATB/')
+
 # setting environment variable for PySide2
 dirname = os.path.dirname(PySide2.__file__)
 plugin_path = os.path.join(dirname, 'plugins', 'platforms')
 os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
 
 
+
 # positions and dimensions of window
-posx = 275
-posy = 100
-width = 650
-height = 700
+posx = 200
+posy = 50
+width = 700
+height = 950
 sizefactor = 0
 sizer = True
 
 pypath = os.path.dirname(os.path.realpath(__file__))        # path of script
 
+"""Definition of labels"""
+DESCity = 'The District Energy Simulation of CityGML Building Models (DESCity)'
+CityATB = 'The CityGML Analysis Toolbox (CityATB) can be used for the analysis, validate and to search building(s) and city quarters using user defined coordinates and attributes.'
+CityBIT = 'The CityGML Building Interpolation Tool (CityBIT) can be used to interpolate building geometries for unavailable building models based on estmations and approximations.'
+CityLDT = ''
+CityGTV = 'The CityGML Geometrical Transformation and Validation Tool (CityGTV) can be used to transform and validate building geometries.'
+CityEnrich = ''
+TeaserPlus = ''
 
 class mainWindow(QtWidgets.QWidget):
     def __init__(self):
@@ -46,17 +57,25 @@ class mainWindow(QtWidgets.QWidget):
         if sizer:
             posx, posy, width, height, sizefactor = gf.screenSizer(self, posx, posy, width, height, app)
             sizer = False
-        gf.windowSetup(self, posx, posy, width, height, pypath, 'DESCity')
+        gf.windowSetup(self, posx, posy, width, height, pypath, 'The District Energy Simulation of CityGML Building Models (DESCity)')
 
         # Setting main layout
         self.vbox = QtWidgets.QVBoxLayout(self)
         self.setLayout(self.vbox)
 
+        self.Font_b = QtGui.QFont()
+        self.Font_b.setBold(True)
+
+        self.Font_i = QtGui.QFont()
+        self.Font_i.setItalic(True)
+
         # Loading banner
         gf.load_banner(self, os.path.join(pypath, r'pictures\e3dHeader.png'), sizefactor)
-
-
-        # Data availability and processing
+        # self.lbl_descity = QtWidgets.QLabel(DESCity)
+        # self.vbox.addWidget(self.lbl_descity)
+        """
+        Data availability and processing
+        """
         self.tGrid = QtWidgets.QVBoxLayout()
 
         self.box_data = QtWidgets.QGroupBox('Data availability and pre-processing')
@@ -65,20 +84,53 @@ class mainWindow(QtWidgets.QWidget):
         self.grid_data = QtWidgets.QGridLayout()
         self.box_data.setLayout(self.grid_data)
 
+        """CityATB"""
         self.box_atb = QtWidgets.QGroupBox('CityATB')
         self.grid_data.addWidget(self.box_atb)
 
+        self.vboxgrid_atb = QtWidgets.QGridLayout()
+        self.box_atb.setLayout(self.vboxgrid_atb)
 
+        self.lbl_atb = QtWidgets.QLabel(CityBIT)
+        self.lbl_atb.setWordWrap(True)
+        self.vboxgrid_atb.addWidget(self.lbl_atb, 0, 0, 1, 2)
+
+        self.btn_atb_tool = QtWidgets.QPushButton('CityATB')
+        self.vboxgrid_atb.addWidget(self.btn_atb_tool, 0, 2, 1, 1)
+
+        """CityBIT"""
         self.box_bit = QtWidgets.QGroupBox('CityBIT')
         self.grid_data.addWidget(self.box_bit)
 
+        self.vboxgrid_bit = QtWidgets.QGridLayout()
+        self.box_bit.setLayout(self.vboxgrid_bit)
 
+        self.lbl_bit = QtWidgets.QLabel(CityBIT)
+        self.lbl_bit.setWordWrap(True)
+        self.vboxgrid_bit.addWidget(self.lbl_bit, 0, 0, 1, 2)
+
+        self.btn_bit_tool = QtWidgets.QPushButton('CityBIT')
+        self.vboxgrid_bit.addWidget(self.btn_bit_tool, 0, 2, 1, 1)
+
+        """CityLDT"""
         self.box_ldt = QtWidgets.QGroupBox('CityLDT')
         self.grid_data.addWidget(self.box_ldt)
 
+        self.vboxgrid_ldt = QtWidgets.QGridLayout()
+        self.box_ldt.setLayout(self.vboxgrid_ldt)
+
+        self.lbl_ldt = QtWidgets.QLabel(CityBIT)
+        self.lbl_ldt.setWordWrap(True)
+        self.vboxgrid_ldt.addWidget(self.lbl_ldt, 0, 0, 1, 2)
+
+        self.btn_ldt_tool = QtWidgets.QPushButton('CityLDT')
+        self.vboxgrid_ldt.addWidget(self.btn_ldt_tool, 0, 2, 1, 1)
+
         self.vbox.addLayout(self.tGrid)
 
-        # Data availability and processing
+        """
+        Enrichment
+        """
         self.mGrid = QtWidgets.QVBoxLayout()
 
         self.box_enrichment = QtWidgets.QGroupBox('Enrichment')
@@ -87,15 +139,39 @@ class mainWindow(QtWidgets.QWidget):
         self.grid_enrich = QtWidgets.QGridLayout()
         self.box_enrichment.setLayout(self.grid_enrich)
 
+        """CityGTV"""
         self.box_gtv = QtWidgets.QGroupBox('CityGTV')
         self.grid_enrich.addWidget(self.box_gtv)
 
+        self.vboxgrid_gtv = QtWidgets.QGridLayout()
+        self.box_gtv.setLayout(self.vboxgrid_gtv)
+
+        self.lbl_gtv = QtWidgets.QLabel(CityBIT)
+        self.lbl_gtv.setWordWrap(True)
+        self.vboxgrid_gtv.addWidget(self.lbl_gtv, 0, 0, 1, 2)
+
+        self.btn_gtv_tool = QtWidgets.QPushButton('CityGTV')
+        self.vboxgrid_gtv.addWidget(self.btn_gtv_tool, 0, 2, 1, 1)
+
+        """CityEnrich"""
         self.box_enrich = QtWidgets.QGroupBox('CityEnrich')
         self.grid_enrich.addWidget(self.box_enrich)
 
+        self.vboxgrid_enrich = QtWidgets.QGridLayout()
+        self.box_enrich.setLayout(self.vboxgrid_enrich)
+
+        self.lbl_enrich = QtWidgets.QLabel(CityBIT)
+        self.lbl_enrich.setWordWrap(True)
+        self.vboxgrid_enrich.addWidget(self.lbl_enrich, 0, 0, 1, 2)
+
+        self.btn_enrich_tool = QtWidgets.QPushButton('CityEnrich')
+        self.vboxgrid_enrich.addWidget(self.btn_enrich_tool, 0, 2, 1, 1)
+
         self.vbox.addLayout(self.mGrid)
 
-        # Data availability and processing
+        """
+        Simulation
+        """
         self.m1Grid = QtWidgets.QVBoxLayout()
 
         self.box_simulate = QtWidgets.QGroupBox('Simulation')
@@ -104,11 +180,24 @@ class mainWindow(QtWidgets.QWidget):
         self.grid_simulate = QtWidgets.QGridLayout()
         self.box_simulate.setLayout(self.grid_simulate)
 
+        """TEASER+"""
         self.box_tplus = QtWidgets.QGroupBox('TEASER+')
         self.grid_simulate.addWidget(self.box_tplus)
 
+        self.vboxgrid_tplus = QtWidgets.QGridLayout()
+        self.box_tplus.setLayout(self.vboxgrid_tplus)
+
+        self.lbl_tplus = QtWidgets.QLabel(CityBIT)
+        self.lbl_tplus.setWordWrap(True)
+        self.vboxgrid_tplus.addWidget(self.lbl_tplus, 0, 0, 1, 2)
+
+        self.btn_tplus_tool = QtWidgets.QPushButton('TEASER+')
+        self.vboxgrid_tplus.addWidget(self.btn_tplus_tool, 0, 2, 1, 1)
+
         self.vbox.addLayout(self.m1Grid)
 
+
+        """Lower grid with About, HomePage and Exit"""
         self.grid_lower = QtWidgets.QGridLayout()
         self.vbox.addLayout(self.grid_lower)
 
@@ -119,7 +208,7 @@ class mainWindow(QtWidgets.QWidget):
         self.grid_lower.addWidget(self.btn_homepage, 0, 1, 1, 1)
 
         self.btn_homepage = QtWidgets.QPushButton('Exit')
-        self.grid_lower.addWidget(self.btn_homepage, 0, 2, 1, 1)
+        self.grid_lower.addWidget(self.btn_homepage, 0, 3, 1, 1)
 
 
 if __name__ == "__main__":
