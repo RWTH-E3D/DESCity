@@ -14,8 +14,7 @@ import sys
 import PySide2
 from PySide2 import QtWidgets, QtGui
 import gui_funct as gf
-
-# sys.path.insert(0, '/CityATB/')
+import webbrowser
 
 # setting environment variable for PySide2
 dirname = os.path.dirname(PySide2.__file__)
@@ -34,19 +33,23 @@ sizer = True
 
 pypath = os.path.dirname(os.path.realpath(__file__))        # path of script
 
-"""Definition of labels"""
+"""Label Descriptions"""
 DESCity = 'The District Energy Simulation of CityGML Building Models (DESCity)'
 CityATB = 'The CityGML Analysis Toolbox (CityATB) can be used for the analysis, validate and to search building(s) and city quarters using user defined coordinates and attributes.'
 CityBIT = 'The CityGML Building Interpolation Tool (CityBIT) can be used to interpolate building geometries for unavailable building models based on estmations and approximations.'
-CityLDT = ''
+CityLDT = 'The CityGML Levels of Detail Transformation'
 CityGTV = 'The CityGML Geometrical Transformation and Validation Tool (CityGTV) can be used to transform and validate building geometries.'
 CityEnrich = ''
 TeaserPlus = ''
+
+global parent_path
+path_parent = os.path.dirname(os.getcwd())
 
 class mainWindow(QtWidgets.QWidget):
     def __init__(self):
         #initiate the parent
         super(mainWindow,self).__init__()
+
         self.initUI()
 
 
@@ -55,7 +58,7 @@ class mainWindow(QtWidgets.QWidget):
 
         # setup of gui / layout
         if sizer:
-            posx, posy, width, height, sizefactor = gf.screenSizer(self, posx, posy, width, height, app)
+            posx, posy, width, height, sizefactor = gf.screenSizer(self,posx, posy, width, height, app)
             sizer = False
         gf.windowSetup(self, posx, posy, width, height, pypath, 'The District Energy Simulation of CityGML Building Models (DESCity)')
 
@@ -91,7 +94,7 @@ class mainWindow(QtWidgets.QWidget):
         self.vboxgrid_atb = QtWidgets.QGridLayout()
         self.box_atb.setLayout(self.vboxgrid_atb)
 
-        self.lbl_atb = QtWidgets.QLabel(CityBIT)
+        self.lbl_atb = QtWidgets.QLabel(CityATB)
         self.lbl_atb.setWordWrap(True)
         self.vboxgrid_atb.addWidget(self.lbl_atb, 0, 0, 1, 2)
 
@@ -199,21 +202,85 @@ class mainWindow(QtWidgets.QWidget):
 
         """Lower grid with About, HomePage and Exit"""
         self.grid_lower = QtWidgets.QGridLayout()
-        self.vbox.addLayout(self.grid_lower)
+
 
         self.btn_about = QtWidgets.QPushButton('About')
         self.grid_lower.addWidget(self.btn_about, 0, 0, 1, 1)
 
-        self.btn_homepage = QtWidgets.QPushButton('e3D Homepage')
+        self.btn_homepage = QtWidgets.QPushButton('E3D Homepage')
         self.grid_lower.addWidget(self.btn_homepage, 0, 1, 1, 1)
 
-        self.btn_homepage = QtWidgets.QPushButton('Exit')
-        self.grid_lower.addWidget(self.btn_homepage, 0, 3, 1, 1)
+        self.btn_exit = QtWidgets.QPushButton('Exit')
+        self.grid_lower.addWidget(self.btn_exit, 0, 3, 1, 1)
+
+        self.vbox.addLayout(self.grid_lower)
+
+        self.btn_atb_tool.clicked.connect(self.func_CityATB)
+        self.btn_ldt_tool.clicked.connect(self.func_CityLDT)
+        self.btn_bit_tool.clicked.connect(self.func_CityBIT)
+        self.btn_gtv_tool.clicked.connect(self.func_CityGTV)
+        self.btn_enrich_tool.clicked.connect(self.func_CityEnrich)
+        self.btn_tplus_tool.clicked.connect(self.func_TEASERPlus)
+        self.btn_homepage.clicked.connect(self.func_E3D)
+        self.btn_exit.clicked.connect(self.func_exit)
+
+        sys.path.append('../')
+
+    def func_CityATB(self):
+        self.close()
+        self.target_CityATB= './CityATB/'
+        os.chdir(self.target_CityATB)
+        os.system('python ./main.py')
+        # os.chdir(self.path_parent)
+
+    def func_CityLDT(self):
+        self.close()
+        self.target_CityLDT= './CityLDT/'
+        os.chdir(self.target_CityLDT)
+        os.system('python ./main.py')
+        # os.chdir(self.path_parent)
+
+    def func_CityBIT(self):
+        self.close()
+        target_CityBIT= './CityBIT/'
+        os.chdir(target_CityBIT)
+        # self.hide()
+        os.system('python ./main.py')
+        # os.chdir(self.path_parent)
+
+
+    def func_CityGTV(self):
+        self.close()
+        self.target_CityGTV= './CityGTV/'
+        os.chdir(self.target_CityGTV)
+        os.system('python ./CityGTVmain.py')
+        # os.chdir(self.path_parent)
+
+    def func_CityEnrich(self):
+        self.close()
+        self.target_CityEnrich= './CityEnrich/'
+        os.chdir(self.target_CityEnrich)
+        os.system('python ./enrich_main.py')
+        # os.chdir(self.path_parent)
+
+    def func_TEASERPlus(self):
+        self.close()
+        self.target_TEASERPlus= './TEASERPlus/'
+        os.chdir(self.target_TEASERPlus)
+        os.system('python ./main.py')
+
+    def func_E3D(self):
+        webbrowser.open('https://www.e3d.rwth-aachen.de/')
+
+    def func_exit(self):
+        gf.close_application(self)
+
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle('Fusion')
+    app.setStyleSheet("QLabel{font-size: 8pt;} QPushButton{font-size: pt;} QRadioButton{font-size: 10pt;} QGroupBox{font-size: 10pt;} QComboBox{font-size: 10pt;} QLineEdit{font-size: 10pt;}")
     widget = mainWindow()
     widget.show()
     sys.exit(app.exec_())

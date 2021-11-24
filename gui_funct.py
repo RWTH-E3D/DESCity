@@ -1,7 +1,6 @@
 import os
-# import teaserplus_gui as tg
 from PySide2 import QtWidgets, QtGui, QtCore
-
+import DESmain as desmain
 
 
 
@@ -35,3 +34,28 @@ def load_banner(self, path, sizefactor, banner_size=150):
         self.vbox.addWidget(self.banner)
     except:
         print('error finding banner picture')
+
+
+def close_application(self):
+    """quit dialog, to confirm exiting"""
+    choice = QtWidgets.QMessageBox.question(self, 'Attention!', 'Do you want to quit?',
+                                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+    if choice == QtWidgets.QMessageBox.Yes:
+        QtCore.QCoreApplication.instance().quit()
+    else:
+        pass
+
+
+def open_main(self):
+    """quit dialog, to confirm exiting"""
+    choice = QtWidgets.QMessageBox.question(self, 'Attention!', 'Do you want to open DESCity?',
+                                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+    if choice == QtWidgets.QMessageBox.Yes:
+        # desmain.path_parent
+        os.chdir(desmain.path_parent)
+        # print(desmain.path_parent)
+        self.close()
+        os.system('python ./DESmain.py')
+        # QtCore.QCoreApplication.instance().quit()
+    else:
+        pass
